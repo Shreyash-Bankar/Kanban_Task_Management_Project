@@ -1,0 +1,15 @@
+<div class="column">
+  <h2>{{ title }}</h2>
+
+  <div class="tasks">
+    <app-task-card *ngFor="let task of tasks" [task]="task"></app-task-card>
+  </div>
+
+  <div class="actions">
+    <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
+  </div>
+
+  <div *ngIf="showForm" class="form-popup">
+    <app-task-form (taskCreated)="addTask($event)"></app-task-form>
+  </div>
+</div>
