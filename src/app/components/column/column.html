@@ -5,11 +5,22 @@
     <app-task-card *ngFor="let task of tasks" [task]="task"></app-task-card>
   </div>
 
+
   <div class="actions">
     <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
   </div>
 
-  <div *ngIf="showForm" class="form-popup">
-    <app-task-form (taskCreated)="addTask($event)"></app-task-form>
+
+  <div class="modal-backdrop" *ngIf="showForm">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Create New Task</h3>
+        <button class="close-btn" (click)="toggleForm()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <app-task-form (taskCreated)="addTask($event)"></app-task-form>
+      </div>
+    </div>
   </div>
 </div>
