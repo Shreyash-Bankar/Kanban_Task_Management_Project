@@ -74,7 +74,7 @@
   margin: 10px;
   padding: 10px;
   border-radius: 12px;
-  box-shadow: 2px 2px 4px 6px rgba(21, 37, 120, 0.1);
+  box-shadow: 2px 2px 2px 2px black;
   display: flex;
   flex-direction: column;
   align-items: center;
