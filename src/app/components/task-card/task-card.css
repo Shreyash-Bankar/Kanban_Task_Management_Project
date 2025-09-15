@@ -6,13 +6,37 @@
   padding: 10px;
   border-radius: 8px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   position: relative; 
+  transition: box-shadow 0.3s ease;
+}
+.description {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #444;
+ 
+  overflow-y: auto;       
+  word-wrap: break-word;
+}
+
+
+
+.task-card.low {
+  border-left-color: #28a745;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);
+}
+
+.task-card.medium {
+  border-left-color: #ffc107;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.5);
+}
+
+.task-card.high {
+  border-left-color: #dc3545;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.5);
 }
 
 .task-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -20,14 +44,31 @@
   margin: 0;
   font-size: 1rem;
   color: #222;
+  white-space: nowrap;     
+  overflow: hidden;         
+  text-overflow: ellipsis;  
+  max-width: 100%;          
+  padding-right:50px ;
+}
+
+.description {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #444;
+  white-space: pre-wrap;   
+  word-wrap: break-word;   
+  overflow: hidden;        
+  text-overflow: ellipsis;
 }
 
 .priority {
+  display: inline-block;
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 0.8rem;
   text-transform: capitalize;
   color: white;
+  margin-top: 6px;
 }
 
 .priority.low {
@@ -43,7 +84,6 @@
   background: #dc3545;
 }
 
-/* 🔹 New styles for edit/delete buttons */
 .card-actions {
   position: absolute;
   top: 6px;

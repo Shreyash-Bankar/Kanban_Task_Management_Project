@@ -1,15 +1,12 @@
-<div class="task-card">
+<div class="task-card {{ task.priority }}">
   <div class="card-actions">
-    <button class="icon-btn edit-btn" (click)="onEdit()">
-      ✏️
-    </button>
-    <button class="icon-btn delete-btn" (click)="onDelete()">
-      🗑️
-    </button>
-    </div>
+    <button class="icon-btn edit-btn" (click)="onEdit()">✏️</button>
+    <button class="icon-btn delete-btn" (click)="onDelete()">🗑️</button>
+  </div>
+
   <div class="task-header">
     <h3>{{ task.title }}</h3>
-    <span class="priority {{ task.priority }}">{{ task.priority }}</span>
   </div>
-  <p>{{ task.description }}</p>
+  <p class="description">{{ task.description }}</p>
+  <span class="priority {{ task.priority }}">{{ task.priority }}</span>
 </div>
