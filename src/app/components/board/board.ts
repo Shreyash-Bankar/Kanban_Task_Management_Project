@@ -10,5 +10,5 @@ import { Column } from '../column/column';
   styleUrls: ['./board.css']
 })
 export class Board {
-  columns = ['To Do', 'In Progress', 'Completed', 'Delivered'];
+  columns = ['To Do', 'In Progress', 'Completed'];
 }

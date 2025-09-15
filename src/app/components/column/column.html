@@ -2,24 +2,33 @@
   <h2>{{ title }}</h2>
 
   <div class="tasks">
-    <app-task-card *ngFor="let task of tasks" [task]="task"></app-task-card>
-  </div>
+    <app-task-card
+  *ngFor="let task of tasks; let i = index"
+  [task]="task"
+  [index]="i"
+  (editTask)="editTask($event)"
+  (deleteTask)="deleteTask($event)">
+</app-task-card>
 
+  </div>
 
   <div class="actions">
     <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
   </div>
 
-
   <div class="modal-backdrop" *ngIf="showForm">
     <div class="modal">
       <div class="modal-header">
-        <h3>Create New Task</h3>
+        <h3>{{ editingIndex !== null ? 'Edit Task' : 'Create New Task' }}</h3>
         <button class="close-btn" (click)="toggleForm()">×</button>
       </div>
 
       <div class="modal-body">
-        <app-task-form (taskCreated)="addTask($event)"></app-task-form>
+        <app-task-form 
+  [existingTask]="editingIndex !== null ? tasks[editingIndex] : null"
+  (taskCreated)="saveTask($event)">
+</app-task-form>
+
       </div>
     </div>
   </div>

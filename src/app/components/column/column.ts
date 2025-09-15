@@ -12,15 +12,31 @@ import { TaskFormComponent } from '../task-form/task-form';
 })
 export class Column {
   @Input() title = '';
-  tasks: { title: string; description: string; priority: string }[] = [];
+
+  tasks: { id: number; title: string; description: string; priority: string }[] = [];
   showForm = false;
+  editingIndex: number | null = null;
 
   toggleForm() {
     this.showForm = !this.showForm;
+    if (!this.showForm) this.editingIndex = null;
   }
 
-  addTask(task: { title: string; description: string; priority: string }) {
-    this.tasks.push(task);
-    this.showForm = false;
+  saveTask(task: { title: string; description: string; priority: string }) {
+    if (this.editingIndex !== null) {
+      this.tasks[this.editingIndex] = { ...this.tasks[this.editingIndex], ...task };
+    } else {
+      this.tasks.push({ id: Date.now(), ...task });
+    }
+    this.toggleForm();
+  }
+
+  editTask(index: number) {
+    this.editingIndex = index;
+    this.showForm = true;
+  }
+
+  deleteTask(index: number) {
+    this.tasks.splice(index, 1);
   }
 }
