@@ -47,6 +47,7 @@ export class Board {
       title: title,
       tasks: [],
     });
+    // this.save();
   }
   editColumn(event: { id: string; newTitle: string }) {
   const col = this.columns.find(c => c.id === event.id);
@@ -54,17 +55,33 @@ export class Board {
     col.title = event.newTitle;
     // also update the column id in case new title changes it
     col.id = event.newTitle.replace(/\s+/g, '').toLowerCase();
+    // this.save();
   }
 }
 
 deleteColumn(id: string) {
   
     this.columns = this.columns.filter(c => c.id !== id);
+    // this.save();
   
 }
  dropColumn(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
+    // this.save();
   }
   
+  save() {
+  localStorage.setItem('session', JSON.stringify(this.columns));
+}
+
+load() {
+  const data = localStorage.getItem('session');
+  this.columns = data ? JSON.parse(data) : [];
+}
+
+
+ngOnInit() {
+  this.load();
+}
 
 }
