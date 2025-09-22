@@ -6,6 +6,7 @@
   padding: 20px;
   background: #dfeaf5;
   min-height: 100vh;
+  flex-wrap: wrap;
 }
 .example-container {
   width: 400px;
@@ -62,4 +63,13 @@
 
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.board button{
+  padding: 5px;
+  width: 230px;
+  background-color: blue;
+  color: white;
+  font-weight: bolder;
+  border-radius: 5px;
+  margin-top: 13px;
 }

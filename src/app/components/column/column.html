@@ -1,34 +1,48 @@
-<div class="column" >
-  <h2>{{ title }}</h2>
-
-  <div cdkDropList class="tasks example-list" (cdkDropListDropped)="drop($event)" >
-    <app-task-card cdkDrag class ="example-box"
-  *ngFor="let task of tasks; let i = index"
-  [task]="task"
-  [index]="i"
-  (editTask)="editTask($event)"
-  (deleteTask)="deleteTask($event)">
-</app-task-card>
-
+<div class="column">
+  
+  <div class="column-actions">
+    <button (click)="onEditColumn()">✏️</button>
+    <span>{{ title }} </span>
+    <button (click)="onDeleteColumn()">🗑</button>
   </div>
 
+  <!-- Drop list wrapping tasks -->
+  <div
+    cdkDropList
+    [id]="id"
+    [cdkDropListData]="tasks"
+    [cdkDropListConnectedTo]="connectedDropLists"
+    (cdkDropListDropped)="drop($event)"
+    class="tasks example-list"
+  >
+    <app-task-card
+      *ngFor="let task of tasks; let i = index"
+      [task]="task"
+      [index]="i"
+      (editTask)="editTask(i)"
+      (deleteTask)="deleteTask(i)"
+      cdkDrag
+      class="example-box"
+    ></app-task-card>
+  </div>
+
+  <!-- Add Task button -->
   <div class="actions">
     <button class="add-btn" (click)="toggleForm()">+ Add Task</button>
   </div>
 
+  <!-- Task Form Modal -->
   <div class="modal-backdrop" *ngIf="showForm">
     <div class="modal">
       <div class="modal-header">
         <h3>{{ editingIndex !== null ? 'Edit Task' : 'Create New Task' }}</h3>
         <button class="close-btn" (click)="toggleForm()">×</button>
       </div>
-
       <div class="modal-body">
-        <app-task-form 
-  [existingTask]="editingIndex !== null ? tasks[editingIndex] : null"
-  (taskCreated)="saveTask($event)">
-</app-task-form>
-
+        <app-task-form
+          [existingTask]="editingIndex !== null ? tasks[editingIndex] : null"
+          (taskCreated)="saveTask($event)"
+        ></app-task-form>
       </div>
     </div>
   </div>

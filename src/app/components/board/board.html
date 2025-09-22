@@ -1,3 +1,20 @@
-<div class="board">
-  <app-column *ngFor="let col of columns" [title]="col"></app-column>
+<div
+  class="board"
+  cdkDropList
+  cdkDropListOrientation="mixed"
+  [cdkDropListData]="columns"
+  (cdkDropListDropped)="dropColumn($event)"
+>
+  <div *ngFor="let col of columns" cdkDrag class="column-wrapper">
+    <app-column
+      [title]="col.title"
+      [tasks]="col.tasks"
+      [id]="col.id"
+      [connectedDropLists]="getConnectedDropLists(col.id)"
+      (editColumn)="editColumn($event)"   
+    (deleteColumn)="deleteColumn($event)"
+    ></app-column>
+  </div>
+  <button (click)="promptAddColumn()">+ Add Column</button>
 </div>
+
