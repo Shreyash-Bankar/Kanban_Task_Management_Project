@@ -5,7 +5,8 @@
   border-left: 6px solid;
   padding: 10px;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  
   position: relative; 
   transition: box-shadow 0.3s ease;
 }

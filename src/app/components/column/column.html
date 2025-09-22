@@ -1,8 +1,8 @@
-<div class="column">
+<div class="column" >
   <h2>{{ title }}</h2>
 
-  <div class="tasks">
-    <app-task-card
+  <div cdkDropList class="tasks example-list" (cdkDropListDropped)="drop($event)" >
+    <app-task-card cdkDrag class ="example-box"
   *ngFor="let task of tasks; let i = index"
   [task]="task"
   [index]="i"
