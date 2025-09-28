@@ -1,9 +1,16 @@
+
+<div class="nav">
+  <button (click)="promptAddColumn()">+ Add Column</button>
+  <button color="warn" (click)="resetBoard()">Reset Board</button>
+</div>
+
+
 <div
-  class="board"
-  cdkDropList
-  cdkDropListOrientation="mixed"
-  [cdkDropListData]="columns"
-  (cdkDropListDropped)="dropColumn($event)"
+class="board"
+cdkDropList
+cdkDropListOrientation="mixed"
+[cdkDropListData]="columns"
+(cdkDropListDropped)="dropColumn($event)"
 >
   <div *ngFor="let col of columns" cdkDrag class="column-wrapper">
     <app-column
@@ -14,11 +21,6 @@
       (editColumn)="editColumn($event)"   
     (deleteColumn)="deleteColumn($event)"
     ></app-column>
-  </div>
-  <div>
-  <button (click)="promptAddColumn()">+ Add Column</button>
-  <br>
-  <button (click)="save()">+ Save Board</button>
   </div>
 </div>
 

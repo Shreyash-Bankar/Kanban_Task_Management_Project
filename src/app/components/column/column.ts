@@ -1,7 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskCardComponent } from '../task-card/task-card';
 import { TaskFormComponent } from '../task-form/task-form';
+import { MatDialog } from '@angular/material/dialog';
+import { ColumnDialogComponent } from '../column-dialog/column-dialog';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -21,6 +23,7 @@ import {
     CdkDropListGroup,
     CdkDropList,
     CdkDrag,
+    
   ],
   templateUrl: './column.html',
   styleUrls: ['./column.css'],
@@ -36,6 +39,7 @@ export class Column {
 
   showForm = false;
   editingIndex: number | null = null;
+  constructor(private dialog: MatDialog) {}
 
   // ✅ Horizontal drag list demo (time periods)
   timePeriods = [
@@ -58,17 +62,13 @@ export class Column {
 
   // Column management
   onEditColumn() {
-    const newTitle = prompt('Enter new column title', this.title);
-    if (newTitle && newTitle.trim() !== '') {
-      this.editColumn.emit({ id: this.id, newTitle: newTitle.trim() });
-    }
-  }
+  this.editColumn.emit({ id: this.id, newTitle: this.title });
+}
+
 
   onDeleteColumn() {
-    if (confirm(`Are you sure you want to delete column "${this.title}"?`)) {
-      this.deleteColumn.emit(this.id);
-    }
-  }
+  this.deleteColumn.emit(this.id);
+}
 
   // Task management
   saveTask(task: any) {
@@ -81,17 +81,20 @@ export class Column {
       this.tasks.push({ id: Date.now(), ...task });
     }
     this.toggleForm();
+    this.save();
   }
-
+  
   editTask(index: number) {
     this.editingIndex = index;
     this.showForm = true;
+    this.save();
   }
-
+  
   deleteTask(index: number) {
     this.tasks.splice(index, 1);
+    this.save();
   }
-
+  
   // Handles drag & drop for tasks
   drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
@@ -108,5 +111,28 @@ export class Column {
         event.currentIndex
       );
     }
+   
+    this.save();
+
+    const sourceId = event.previousContainer.id.replace('cdk-drop-list-', '');
+    localStorage.setItem(`session2_${sourceId}`, JSON.stringify(event.previousContainer.data));
   }
+
+  save() {
+  localStorage.setItem(`session2_${this.id}`, JSON.stringify(this.tasks));
+
+}
+
+load() {
+  const data = localStorage.getItem(`session2_${this.id}`);
+this.tasks = data ? JSON.parse(data) : [];
+
+}
+
+
+ngOnInit() {
+  this.load();
+}
+
+
 }

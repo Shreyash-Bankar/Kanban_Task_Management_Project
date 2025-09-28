@@ -1,0 +1,80 @@
+/* Container styles */
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 14px;
+  color: #444;
+  padding-top: 10px;
+}
+
+/* Label styling */
+mat-dialog-content label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: inline-block;
+  color: #333;
+}
+
+/* Input box styling */
+.dialog-input {
+  width: 90%;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.dialog-input:focus {
+  border-color: #3f51b5; /* Material Indigo */
+  box-shadow: 0 0 6px rgba(63, 81, 181, 0.3);
+}
+
+/* Confirm-only message */
+mat-dialog-content p {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+}
+
+/* Dialog header */
+h2[mat-dialog-title] {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #3f51b5;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+/* Action buttons */
+mat-dialog-actions {
+  margin-top: 15px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+}
+
+button[mat-button] {
+  border-radius: 6px;
+  padding: 4px 18px;
+  font-weight: 600;
+  margin-right: 10px;
+
+}
+
+button[mat-raised-button] {
+  border-radius: 6px;
+  padding: 4px 18px;
+  font-weight: 600;
+
+}
+button:hover{
+  background-color: blue;
+  color: white;
+}
+button:active{
+  color:red;
+}
