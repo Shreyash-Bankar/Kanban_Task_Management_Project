@@ -4,6 +4,7 @@ import { Column } from '../column/column';
 import { CdkDropList, CdkDrag, CdkDropListGroup, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ColumnDialogComponent } from '../column-dialog/column-dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-board',
@@ -13,7 +14,8 @@ import { ColumnDialogComponent } from '../column-dialog/column-dialog';
   styleUrls: ['./board.css']
 })
 export class Board {
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {}
+
 
   columns = [
     { id: 'todo', title: 'To Do', tasks: [] },
@@ -44,6 +46,9 @@ export class Board {
     if (this.columns.find(c => c.id === id)) return;
     this.columns.push({ id, title, tasks: [] });
     this.save();
+     this.snackBar.open(`🆕 Column "${title}" added`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar'] });
   }
 
   // ✅ Edit Column with dialog
@@ -63,9 +68,12 @@ export class Board {
 
   dialogRef.afterClosed().subscribe(result => {
     if (result && result.trim()) {
-      col.title = result.trim(); // only update title
-      // DO NOT change col.id — keeps tasks intact
+      const oldTitle = col.title;
+      col.title = result.trim(); 
       this.save();
+       this.snackBar.open(`✏️ Column renamed: "${oldTitle}" → "${col.title}"`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar'] } );
     }
   });
 }
@@ -85,20 +93,42 @@ export class Board {
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
+      const col = this.columns.find(c => c.id === id);
       // remove column
       this.columns = this.columns.filter(c => c.id !== id);
       // remove tasks from localStorage
       localStorage.removeItem(`session2_${id}`);
       this.save();
+       this.snackBar.open(`🗑️ Column "${col?.title}" deleted`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar'] });
     }
   });
 }
 
 
   dropColumn(event: CdkDragDrop<any[]>) {
-    moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
-    this.save();
-  }
+  const movedColumn = this.columns[event.previousIndex]; // column being moved
+  const oldIndex = event.previousIndex;
+  const newIndex = event.currentIndex;
+
+  // Move the column
+  moveItemInArray(this.columns, oldIndex, newIndex);
+  this.save();
+
+  // Show snackbar with column title
+  this.snackBar.open(
+    `➡️ Column "${movedColumn.title}" moved from position ${oldIndex + 1} → ${newIndex + 1}`,
+    'Close',
+    {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['custom-snackbar']
+    }
+  );
+}
+
   resetBoard() {
   // Clear all column task storage keys
   this.columns.forEach(col => {
@@ -107,13 +137,23 @@ export class Board {
 
   // Set default columns
   this.columns = [
-    { id: 'todo', title: 'To Do', tasks: [] },
-    { id: 'inprogress', title: 'In Progress', tasks: [] },
-    { id: 'done', title: 'Done', tasks: [] },
+    // { id: 'todo', title: 'To Do', tasks: [] },
+    // { id: 'inprogress', title: 'In Progress', tasks: [] },
+    // { id: 'done', title: 'Done', tasks: [] },
   ];
 
   // Save default board in localStorage
   localStorage.setItem('session', JSON.stringify(this.columns));
+  this.snackBar.open(
+    `Board Cleared!`,
+    'Close',
+    {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['custom-snackbar']
+    }
+  );
 }
 
   save() {

@@ -4,6 +4,8 @@ import { TaskCardComponent } from '../task-card/task-card';
 import { TaskFormComponent } from '../task-form/task-form';
 import { MatDialog } from '@angular/material/dialog';
 import { ColumnDialogComponent } from '../column-dialog/column-dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -29,6 +31,7 @@ import {
   styleUrls: ['./column.css'],
 })
 export class Column {
+
   @Input() title = '';
   @Input() tasks: any[] = [];
   @Input() connectedDropLists: string[] = [];
@@ -39,7 +42,7 @@ export class Column {
 
   showForm = false;
   editingIndex: number | null = null;
-  constructor(private dialog: MatDialog) {}
+constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   // ✅ Horizontal drag list demo (time periods)
   timePeriods = [
@@ -72,18 +75,20 @@ export class Column {
 
   // Task management
   saveTask(task: any) {
-    if (this.editingIndex !== null) {
-      this.tasks[this.editingIndex] = {
-        ...this.tasks[this.editingIndex],
-        ...task,
-      };
-    } else {
-      this.tasks.push({ id: Date.now(), ...task });
-    }
-    this.toggleForm();
-    this.save();
+  if (this.editingIndex !== null) {
+    this.tasks[this.editingIndex] = { ...this.tasks[this.editingIndex], ...task };
+    this.snackBar.open(`✏️ Task "${task.title}" updated in "${this.title}"`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar']});
+  } else {
+    this.tasks.push({ id: Date.now(), ...task });
+    this.snackBar.open(`🆕 Task "${task.title}" added to "${this.title}"`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar'] });
   }
-  
+  this.toggleForm();
+  this.save();
+}
   editTask(index: number) {
     this.editingIndex = index;
     this.showForm = true;
@@ -91,32 +96,38 @@ export class Column {
   }
   
   deleteTask(index: number) {
-    this.tasks.splice(index, 1);
-    this.save();
-  }
+  const removedTask = this.tasks[index];
+  this.tasks.splice(index, 1);
+  this.save();
+  this.snackBar.open(`🗑️ Task "${removedTask.title}" deleted from "${this.title}"`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar'] });
+}
   
   // Handles drag & drop for tasks
   drop(event: CdkDragDrop<any[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
-   
-    this.save();
-
-    const sourceId = event.previousContainer.id.replace('cdk-drop-list-', '');
-    localStorage.setItem(`session2_${sourceId}`, JSON.stringify(event.previousContainer.data));
+  if (event.previousContainer === event.container) {
+    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    this.snackBar.open(`↕️ Task reordered in "${this.title}"`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar']});
+  } else {
+    const movedTask = event.previousContainer.data[event.previousIndex];
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+    this.snackBar.open(`➡️ Task "${movedTask.title}" moved to "${this.title}"`, 'Close', { duration: 3000, horizontalPosition: 'end',
+    verticalPosition: 'top',
+    panelClass: ['custom-snackbar'] });
   }
+
+  this.save();
+  const sourceId = event.previousContainer.id.replace('cdk-drop-list-', '');
+  localStorage.setItem(`session2_${sourceId}`, JSON.stringify(event.previousContainer.data));
+}
 
   save() {
   localStorage.setItem(`session2_${this.id}`, JSON.stringify(this.tasks));
